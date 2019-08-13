@@ -2,7 +2,6 @@ package grpcpool
 
 import (
 	"context"
-	// "fmt"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -76,7 +75,6 @@ func (cc *ClientPool) checkState(conn *grpc.ClientConn) error {
 	state := conn.GetState()
 	switch state {
 	case connectivity.TransientFailure, connectivity.Shutdown:
-		conn.Close()
 		return ErrConnShutdown
 	}
 
@@ -98,11 +96,16 @@ func (cc *ClientPool) getConn() (*grpc.ClientConn, error) {
 		return conn, nil
 	}
 
+	// gc old conn
+	if conn != nil {
+		conn.Close()
+	}
+
 	cc.Lock()
 	defer cc.Unlock()
 
-	// double check
-	if conn != nil {
+	// double check, already inited
+	if conn != nil && cc.checkState(conn) == nil {
 		return conn, nil
 	}
 
