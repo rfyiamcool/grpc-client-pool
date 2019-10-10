@@ -105,6 +105,7 @@ func (cc *ClientPool) getConn() (*grpc.ClientConn, error) {
 	defer cc.Unlock()
 
 	// double check, already inited
+	conn = cc.conns[idx]
 	if conn != nil && cc.checkState(conn) == nil {
 		return conn, nil
 	}
