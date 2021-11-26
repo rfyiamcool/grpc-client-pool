@@ -121,7 +121,7 @@ func (cc *ClientPool) getConn() (*grpc.ClientConn, error) {
 func (cc *ClientPool) connect() (*grpc.ClientConn, error) {
 	conn, err := grpc.Dial(cc.target,
 		grpc.WithInsecure(),
-		grpc.WithBlock(),
+		// grpc.WithBlock(),
 		grpc.WithTimeout(cc.option.DialTimeout),
 		grpc.WithKeepaliveParams(keepalive.ClientParameters{
 			Time:    cc.option.KeepAlive,
