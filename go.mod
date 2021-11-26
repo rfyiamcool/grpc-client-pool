@@ -1,4 +1,4 @@
-module github.com/rfyiamcool/grpcpool
+module github.com/rfyiamcool/grpc-client-pool
 
 go 1.16
 
